@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  const forwardPath = req.url.replace(/^\/ords-api/, "");
+  const forwardPath = req.url.replace(/^\/api/, "");
   const targetUrl = `https://iacademy.oracle.com/ords/id_b633_sql_s35/api${forwardPath}`;
 
   try {
