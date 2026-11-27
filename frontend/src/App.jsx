@@ -13,11 +13,11 @@ import {
   Calendar,
   User,
   Sparkles,
+  ChevronDown,
 } from "lucide-react";
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
-// Palet warna cover buku bernuansa earthy & akademik
 const COVER_STYLES = [
   "from-[#2F5D50] to-[#1D3B32] text-white",
   "from-amber-700 to-yellow-900 text-amber-50",
@@ -467,63 +467,81 @@ export default function App() {
                   <label className="block text-xs font-semibold text-gray-600 mb-1">
                     Anggota Peminjam
                   </label>
-                  <select
-                    value={loanForm.member_id}
-                    onChange={(e) =>
-                      setLoanForm({ ...loanForm, member_id: e.target.value })
-                    }
-                    className="w-full p-2.5 rounded-xl border border-gray-200 text-sm bg-[#F6F7F4] focus:bg-white focus:ring-2 focus:ring-[#2F5D50] outline-none"
-                    required
-                  >
-                    <option value="">-- Pilih Anggota Aktif --</option>
-                    {members.map((m) => (
-                      <option key={m.member_id} value={m.member_id}>
-                        {m.name} ({m.email})
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={loanForm.member_id}
+                      onChange={(e) =>
+                        setLoanForm({ ...loanForm, member_id: e.target.value })
+                      }
+                      className="w-full appearance-none pl-3.5 pr-10 py-2.5 rounded-xl border border-gray-200 text-sm bg-[#F6F7F4] focus:bg-white focus:ring-2 focus:ring-[#2F5D50] outline-none"
+                      required
+                    >
+                      <option value="">-- Pilih Anggota Aktif --</option>
+                      {members.map((m) => (
+                        <option key={m.member_id} value={m.member_id}>
+                          {m.name} ({m.email})
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      size={16}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                    />
+                  </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1">
                     Eksemplar Buku (AVAILABLE)
                   </label>
-                  <select
-                    value={loanForm.copy_id}
-                    onChange={(e) =>
-                      setLoanForm({ ...loanForm, copy_id: e.target.value })
-                    }
-                    className="w-full p-2.5 rounded-xl border border-gray-200 text-sm bg-[#F6F7F4] focus:bg-white focus:ring-2 focus:ring-[#2F5D50] outline-none"
-                    required
-                  >
-                    <option value="">-- Pilih Barcode & Judul --</option>
-                    {availableCopies.map((c) => (
-                      <option key={c.copy_id} value={c.copy_id}>
-                        [{c.barcode}] {c.book_title}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={loanForm.copy_id}
+                      onChange={(e) =>
+                        setLoanForm({ ...loanForm, copy_id: e.target.value })
+                      }
+                      className="w-full appearance-none pl-3.5 pr-10 py-2.5 rounded-xl border border-gray-200 text-sm bg-[#F6F7F4] focus:bg-white focus:ring-2 focus:ring-[#2F5D50] outline-none"
+                      required
+                    >
+                      <option value="">-- Pilih Barcode & Judul --</option>
+                      {availableCopies.map((c) => (
+                        <option key={c.copy_id} value={c.copy_id}>
+                          [{c.barcode}] {c.book_title}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      size={16}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                    />
+                  </div>
                 </div>
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-600 mb-1">
                     Petugas Bertugas
                   </label>
-                  <select
-                    value={loanForm.staff_id}
-                    onChange={(e) =>
-                      setLoanForm({ ...loanForm, staff_id: e.target.value })
-                    }
-                    className="w-full p-2.5 rounded-xl border border-gray-200 text-sm bg-[#F6F7F4] focus:bg-white focus:ring-2 focus:ring-[#2F5D50] outline-none"
-                    required
-                  >
-                    <option value="">-- Pilih Staff --</option>
-                    {staffList.map((s) => (
-                      <option key={s.staff_id} value={s.staff_id}>
-                        {s.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={loanForm.staff_id}
+                      onChange={(e) =>
+                        setLoanForm({ ...loanForm, staff_id: e.target.value })
+                      }
+                      className="w-full appearance-none pl-3.5 pr-10 py-2.5 rounded-xl border border-gray-200 text-sm bg-[#F6F7F4] focus:bg-white focus:ring-2 focus:ring-[#2F5D50] outline-none"
+                      required
+                    >
+                      <option value="">-- Pilih Staff --</option>
+                      {staffList.map((s) => (
+                        <option key={s.staff_id} value={s.staff_id}>
+                          {s.name}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown
+                      size={16}
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                    />
+                  </div>
                 </div>
 
                 <div>
@@ -536,7 +554,7 @@ export default function App() {
                     onChange={(e) =>
                       setLoanForm({ ...loanForm, due_date: e.target.value })
                     }
-                    className="w-full p-2.5 rounded-xl border border-gray-200 text-sm bg-[#F6F7F4] focus:bg-white focus:ring-2 focus:ring-[#2F5D50] outline-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm bg-[#F6F7F4] focus:bg-white focus:ring-2 focus:ring-[#2F5D50] outline-none"
                     required
                   />
                 </div>
