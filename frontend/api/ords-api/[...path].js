@@ -1,9 +1,6 @@
 export default async function handler(req, res) {
-  const { path = [] } = req.query;
-  const endpoint = Array.isArray(path) ? path.join("/") : path;
-  // Pertahankan trailing slash karena ORDS membutuhkannya
-  const hasTrailingSlash = req.url.split("?")[0].endsWith("/");
-  const targetUrl = `https://iacademy.oracle.com/ords/id_b633_sql_s35/api/${endpoint}${hasTrailingSlash ? "/" : ""}`;
+  const forwardPath = req.url.replace(/^\/ords-api/, "");
+  const targetUrl = `https://iacademy.oracle.com/ords/id_b633_sql_s35/api${forwardPath}`;
 
   try {
     const fetchOptions = {
@@ -15,8 +12,11 @@ export default async function handler(req, res) {
     };
 
     if (req.method !== "GET" && req.method !== "HEAD" && req.body) {
-      fetchOptions.body =
+      const bodyStr =
         typeof req.body === "string" ? req.body : JSON.stringify(req.body);
+      if (bodyStr && bodyStr !== "{}") {
+        fetchOptions.body = bodyStr;
+      }
     }
 
     const response = await fetch(targetUrl, fetchOptions);
