@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/ords-api/:path*",
+      "destination": "https://iacademy.oracle.com/ords/id_b633_sql_s35/api/:path*"
+    }
+  ]
+}
