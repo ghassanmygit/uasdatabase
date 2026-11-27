@@ -1,0 +1,15 @@
+{
+  "create_loan_request": {
+    "endpoint": "POST /ords/id_b633_sql_s35/api/loans/",
+    "body": {
+      "member_id": 1,
+      "staff_id": 1,
+      "copy_id": 1,
+      "due_date": "2026-12-05"
+    }
+  },
+  "return_book_request": {
+    "endpoint": "POST /ords/id_b633_sql_s35/api/loans/1/return/",
+    "body": null
+  }
+}

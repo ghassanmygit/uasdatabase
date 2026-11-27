@@ -1,0 +1,177 @@
+Json Loans smart library
+
+{
+  "member_id": 1,
+  "staff_id": 1,
+  "copy_id": 1,
+  "due_date": "2026-12-05"
+}
+
+
+Testing data
+
+input 1 per 1 gbs sekaligus berikut list input sesuai database 
+
+-- 1. Tambahkan kategori
+INSERT INTO categories (category_name)
+VALUES ('Technology');
+
+-- 2. Tambahkan penerbit
+INSERT INTO publishers (publisher_name)
+VALUES ('Informatika');
+
+-- 3. Tambahkan buku
+INSERT INTO books (
+    category_id,
+    publisher_id,
+    title,
+    isbn,
+    publication_year
+)
+SELECT
+    c.category_id,
+    p.publisher_id,
+    'Clean Code',
+    '9780132350884',
+    2008
+FROM categories c
+CROSS JOIN publishers p
+WHERE c.category_name = 'Technology'
+AND p.publisher_name = 'Informatika';
+
+-- 4. Tambahkan eksemplar
+INSERT INTO book_copies (
+    book_id,
+    barcode,
+    availability_status
+)
+SELECT
+    book_id,
+    'CC-TEST-001',
+    'AVAILABLE'
+FROM books
+WHERE isbn = '9780132350884';
+
+-- 5. Tambahkan anggota
+INSERT INTO members (
+    name,
+    email,
+    phone,
+    status
+)
+VALUES (
+    'Test Member',
+    'testmember@library.com',
+    '081234567890',
+    'ACTIVE'
+);
+
+-- 6. Tambahkan petugas
+INSERT INTO staff (
+    name,
+    email,
+    username
+)
+VALUES (
+    'Test Staff',
+    'teststaff@library.com',
+    'teststaff'
+);
+
+COMMIT;
+
+#perintah peminjaman
+
+DECLARE
+    v_member_id NUMBER;
+    v_staff_id  NUMBER;
+    v_copy_id   NUMBER;
+    v_loan_id   NUMBER;
+BEGIN
+    -- Ambil ID anggota
+    SELECT member_id
+    INTO v_member_id
+    FROM members
+    WHERE email = 'testmember@library.com';
+
+    -- Ambil ID petugas
+    SELECT staff_id
+    INTO v_staff_id
+    FROM staff
+    WHERE username = 'teststaff';
+
+    -- Ambil ID eksemplar
+    SELECT copy_id
+    INTO v_copy_id
+    FROM book_copies
+    WHERE barcode = 'CC-TEST-001';
+
+    -- Jalankan Procedure peminjaman
+    sp_borrow_book(
+        p_member_id => v_member_id,
+        p_staff_id  => v_staff_id,
+        p_copy_id   => v_copy_id,
+        p_due_date  => TRUNC(SYSDATE) + 7,
+        p_loan_id   => v_loan_id
+    );
+
+    COMMIT;
+END;
+
+
+
+
+
+#cek trigger staatus 
+
+SELECT
+    copy_id,
+    barcode,
+    availability_status
+FROM book_copies
+WHERE barcode = 'CC-TEST-001';
+
+
+#periksa list pinjaman 
+
+SELECT
+    loan_id,
+    member_id,
+    staff_id,
+    copy_id,
+    loan_date,
+    due_date,
+    return_date,
+    status
+FROM loans
+ORDER BY loan_id DESC;
+
+#periksa tenggat
+SELECT
+    l.loan_id,
+    l.due_date,
+    l.status,
+    b.title,
+    m.name
+FROM loans l
+JOIN book_copies bc ON l.copy_id = bc.copy_id
+JOIN books b ON bc.book_id = b.book_id
+JOIN members m ON l.member_id = m.member_id
+WHERE bc.barcode = 'CC-TEST-001';
+
+#cek status pengembalian 
+SELECT
+    loan_id,
+    status,
+    due_date,
+    return_date
+FROM loans
+WHERE loan_id = 1;
+
+#cek denda 
+SELECT
+    loan_id,
+    amount,
+    payment_status
+FROM fines
+WHERE loan_id = 1;
