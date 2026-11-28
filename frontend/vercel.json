@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://iacademy.oracle.com/ords/id_b633_sql_s35/api/:path*"
+      "destination": "https://iacademy.oracle.com/ords/id_b633_sql_s35/api/$1"
     }
   ]
 }
